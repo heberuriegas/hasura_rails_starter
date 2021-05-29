@@ -1,0 +1,75 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+    volumes:
+      - 'postgres:/var/lib/postgresql/data'
+  graphql-engine:
+    image: hasura/graphql-engine:v2.0.0-alpha.11
+    ports:
+    - "8080:8080"
+    depends_on:
+    - "postgres"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      ## uncomment next line to set an admin secret
+      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+  redis:
+    image: redis:6.0-alpine
+    volumes:
+      - 'redis:/data'
+  web:
+    depends_on:
+      - 'postgres'
+      - 'redis'
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    command: bash -c "rm -rf tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0 -p 3000"
+    ports:
+      - "3000:3000"
+    volumes:
+      - 'bundle_cache:/bundle'
+      - '.:/app'
+      - .env:/app/.env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgrespassword
+      DISABLE_SPRING: 1
+  worker:
+    depends_on:
+      - 'postgres'
+      - 'redis'
+      - 'web'
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    volumes:
+      - 'bundle_cache:/bundle'
+      - '.:/app'
+      - .env:/app/.env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgrespassword
+      DISABLE_SPRING: 1
+
+volumes:
+  redis:
+  postgres:
+  bundle_cache:

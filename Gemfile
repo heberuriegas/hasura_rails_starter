@@ -32,7 +32,9 @@ gem 'bootsnap', '>= 1.4.4', require: false
 # gem 'rack-cors'
 
 gem 'devise', '~> 4.8'
-gem 'devise-jwt', '~> 0.8.1'
+gem "devise_token_auth", "~> 1.1"
+gem "graphql", "~> 1.12"
+gem 'graphql_devise', '~> 0.16.0'
 
 
 group :development, :test do
@@ -47,3 +49,6 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
+
+
+gem "graphql-playground", "~> 0.1.2"

@@ -35,6 +35,7 @@ gem 'devise', '~> 4.8'
 gem "devise_token_auth", "~> 1.1"
 gem "graphql", "~> 1.12"
 gem 'graphql_devise', '~> 0.16.0'
+gem 'graphql_playground-rails'
 
 
 group :development, :test do
@@ -50,5 +51,4 @@ group :development do
   gem 'spring'
 end
 
-
-gem "graphql-playground", "~> 0.1.2"
+gem "cancancan", "~> 3.2"

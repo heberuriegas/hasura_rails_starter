@@ -21,8 +21,9 @@ services:
       ## enable debugging mode. It is recommended to disable this in production
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      ## uncomment next line to set an admin secret
-      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      HASURA_GRAPHQL_AUTH_HOOK: "http://web:3000/auth/hasura/webhook"
+      HASURA_GRAPHQL_ADMIN_SECRET: hasura
+      BACKEND_URL: web
   redis:
     image: redis:6.0-alpine
     volumes:

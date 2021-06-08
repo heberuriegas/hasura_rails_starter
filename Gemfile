@@ -32,10 +32,11 @@ gem 'bootsnap', '>= 1.4.4', require: false
 # gem 'rack-cors'
 
 gem 'devise', '~> 4.8'
-gem "devise_token_auth", "~> 1.1"
-gem "graphql", "~> 1.12"
+gem 'devise_token_auth', '~> 1.1'
+gem 'graphql', '~> 1.12'
 gem 'graphql_devise', '~> 0.16.0'
 gem 'graphql_playground-rails'
+gem 'cancancan', '~> 3.2'
 
 
 group :development, :test do
@@ -51,4 +52,3 @@ group :development do
   gem 'spring'
 end
 
-gem "cancancan", "~> 3.2"

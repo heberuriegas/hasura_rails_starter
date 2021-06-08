@@ -7,4 +7,8 @@ class User < ApplicationRecord
     :rememberable,
     :validatable
   include GraphqlDevise::Concerns::Model
+
+  ROLES = %i[admin user]
+
+  
 end

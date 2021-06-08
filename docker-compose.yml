@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 services:
   postgres:
     image: postgres:12
@@ -6,13 +6,13 @@ services:
     environment:
       POSTGRES_PASSWORD: postgrespassword
     volumes:
-      - 'postgres:/var/lib/postgresql/data'
+      - "postgres:/var/lib/postgresql/data"
   graphql-engine:
-    image: hasura/graphql-engine:v2.0.0-alpha.11
+    image: hasura/graphql-engine:latest
     ports:
-    - "8080:8080"
+      - "8080:8080"
     depends_on:
-    - "postgres"
+      - "postgres"
     restart: always
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
@@ -21,17 +21,16 @@ services:
       ## enable debugging mode. It is recommended to disable this in production
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_AUTH_HOOK: "http://web:3000/auth/hasura/webhook"
+      HASURA_GRAPHQL_AUTH_HOOK: http://api:3000/hasura/auth
       HASURA_GRAPHQL_ADMIN_SECRET: hasura
-      BACKEND_URL: web
   redis:
     image: redis:6.0-alpine
     volumes:
-      - 'redis:/data'
-  web:
+      - "redis:/data"
+  api:
     depends_on:
-      - 'postgres'
-      - 'redis'
+      - "postgres"
+      - "redis"
     build:
       context: .
       dockerfile: Dockerfile.development
@@ -39,8 +38,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - 'bundle_cache:/bundle'
-      - '.:/app'
+      - "bundle_cache:/bundle"
+      - ".:/app"
       - .env:/app/.env
     environment:
       REDIS_URL: redis://redis:6379/0
@@ -51,16 +50,16 @@ services:
       DISABLE_SPRING: 1
   worker:
     depends_on:
-      - 'postgres'
-      - 'redis'
-      - 'web'
+      - "postgres"
+      - "redis"
+      - "api"
     build:
       context: .
       dockerfile: Dockerfile.development
     command: bundle exec sidekiq -C config/sidekiq.yml
     volumes:
-      - 'bundle_cache:/bundle'
-      - '.:/app'
+      - "bundle_cache:/bundle"
+      - ".:/app"
       - .env:/app/.env
     environment:
       REDIS_URL: redis://redis:6379/0

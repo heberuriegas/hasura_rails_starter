@@ -40,16 +40,17 @@ docker-compose exec web rails db:seed
 Hasura should be running in port 8080 and the rails web server port 3000
 
 ## Features
+
 - Graphql sign up & sign in
-- User with multiple roles (using bitmask)
+- User authorization with cancancan
+- Configure auth webhook for authenticate hasura endpoints
 
 ## TODO
 
-- Configure auth webhook for authenticate hasura endpoints
+- Configure image uploads with active storage
 - Configure action and trigger microservices
 - Configure remote schema permissions with cancancan
 - Configure one click heroku deploy
-- Configure image uploads with active storage
 
 ## License
 

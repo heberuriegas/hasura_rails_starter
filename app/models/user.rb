@@ -7,8 +7,16 @@ class User < ApplicationRecord
     :rememberable,
     :validatable
   include GraphqlDevise::Concerns::Model
-
-  ROLES = %i[admin user]
-
   
+  before_create :default_role
+
+  ROLES = {
+    admin: 'admin',
+    user: 'user'
+  }
+
+  private
+  def default_role
+    self.role = ROLES[:user] unless self.role?
+  end
 end

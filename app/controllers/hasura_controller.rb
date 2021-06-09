@@ -1,10 +1,10 @@
-class HasuraController < ActionController::API
+class HasuraController < ApplicationController
+  before_action :authenticate_user!
+
   def auth
     @response = {
-      "X-Hasura-User-Id": "25",
-      "X-Hasura-Role": "admin",
-      "X-Hasura-Is-Owner": "true",
-      "X-Hasura-Custom": "custom value"
+      "X-Hasura-User-Id": current_user.id.to_s,
+      "X-Hasura-Role": current_user.role,
     }
 
     render json: @response

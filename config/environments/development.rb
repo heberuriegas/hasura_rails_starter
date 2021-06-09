@@ -68,4 +68,7 @@ Rails.application.configure do
 
   # Add api host
   config.hosts << 'api'
+
+  # Active job adapter
+  config.active_job.queue_adapter = :sidekiq
 end

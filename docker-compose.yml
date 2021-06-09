@@ -3,6 +3,8 @@ services:
   postgres:
     image: postgres:12
     restart: always
+    ports:
+      - "5435:5432"
     environment:
       POSTGRES_PASSWORD: postgrespassword
     volumes:
@@ -10,7 +12,7 @@ services:
   graphql-engine:
     image: hasura/graphql-engine:latest
     ports:
-      - "8080:8080"
+      - "8085:8080"
     depends_on:
       - "postgres"
     restart: always
@@ -37,7 +39,7 @@ services:
       dockerfile: Dockerfile.development
     command: bash -c "rm -rf tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0 -p 3000"
     ports:
-      - "3000:3000"
+      - "3005:3000"
     volumes:
       - "bundle_cache:/bundle"
       - ".:/app"

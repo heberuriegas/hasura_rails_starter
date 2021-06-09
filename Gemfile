@@ -34,7 +34,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'devise', '~> 4.8'
 gem 'devise_token_auth', '~> 1.1'
 gem 'graphql', '~> 1.12'
-gem 'graphql_devise', '~> 0.16.0'
+gem 'graphql_devise', '~> 0.17.0'
 gem 'graphql_playground-rails'
 gem 'cancancan', '~> 3.2'
 
@@ -52,3 +52,7 @@ group :development do
   gem 'spring'
 end
 
+
+gem "active_model_otp", "~> 2.2"
+
+gem "twilio-ruby", "~> 5.54"

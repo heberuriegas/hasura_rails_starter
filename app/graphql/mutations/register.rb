@@ -1,5 +1,5 @@
 module Mutations
-  class SignUp < GraphqlDevise::Mutations::SignUp
+  class Register < GraphqlDevise::Mutations::Register
     argument :name, String, required: false
     # Uncomment this line to allow role as argument
     # argument :role, Types::RoleType

@@ -42,7 +42,7 @@ Hasura should be running in port 8080 and the rails web server port 3000
 ## Features
 
 - Graphql sign up & sign in
-- Auth webhook for authenticate hasura endpoints
+- Auth webhook for jwt authentication hasura endpoints
 - Actions and events microservices
 
 ## TODO
@@ -50,6 +50,7 @@ Hasura should be running in port 8080 and the rails web server port 3000
 - Configure image uploads with active storage
 - Configure remote graphql schema
 - Configure one click heroku deploy
+- OTP authentication for smartphones
 
 ## License
 

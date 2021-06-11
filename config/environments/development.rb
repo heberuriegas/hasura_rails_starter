@@ -68,4 +68,15 @@ Rails.application.configure do
 
   # Add api host
   config.hosts << 'api'
+
+
+  # For sidekiq monitor
+  # This also configures session_options for use below
+  config.session_store :cookie_store, key: '_interslice_session'
+
+  # Required for all session management (regardless of session_store)
+  config.middleware.use ActionDispatch::Cookies
+  
+  # Add session middlewares
+  config.middleware.use config.session_store, config.session_options
 end

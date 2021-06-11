@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/woohoou/HasuraHandler.git
+  revision: c73eee4c58962a3283a5a208823961a197d64664
+  specs:
+    hasura_handler (0.1.10)
+      rails (>= 5.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -65,8 +72,7 @@ GEM
       msgpack (~> 1.0)
     builder (3.2.4)
     byebug (11.1.3)
-    cancancan (3.2.2)
-    concurrent-ruby (1.1.8)
+    concurrent-ruby (1.1.9)
     connection_pool (2.2.5)
     crass (1.0.6)
     devise (4.8.0)
@@ -100,7 +106,7 @@ GEM
     listen (3.5.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.9.1)
+    loofah (2.10.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -203,13 +209,13 @@ PLATFORMS
 DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
-  cancancan (~> 3.2)
   devise (~> 4.8)
   devise_token_auth (~> 1.1)
   dotenv-rails (~> 2.7)
   graphql (~> 1.12)
   graphql_devise (~> 0.16.0)
   graphql_playground-rails
+  hasura_handler!
   listen (~> 3.3)
   pg
   puma (~> 5.0)
@@ -223,4 +229,4 @@ RUBY VERSION
    ruby 2.7.3p183
 
 BUNDLED WITH
-   2.2.17
+   2.2.18

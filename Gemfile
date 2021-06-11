@@ -36,8 +36,7 @@ gem 'devise_token_auth', '~> 1.1'
 gem 'graphql', '~> 1.12'
 gem 'graphql_devise', '~> 0.16.0'
 gem 'graphql_playground-rails'
-gem 'cancancan', '~> 3.2'
-
+gem 'hasura_handler', git: 'https://github.com/woohoou/HasuraHandler.git'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -51,4 +50,3 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
-

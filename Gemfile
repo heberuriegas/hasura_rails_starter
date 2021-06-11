@@ -36,8 +36,10 @@ gem 'devise_token_auth', '~> 1.1'
 gem 'graphql', '~> 1.12'
 gem 'graphql_devise', '~> 0.17.0'
 gem 'graphql_playground-rails'
-gem 'cancancan', '~> 3.2'
+gem 'hasura_handler', git: 'https://github.com/woohoou/HasuraHandler.git'
 
+gem 'active_model_otp', '~> 2.2'
+gem 'twilio-ruby', '~> 5.54'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -53,6 +55,3 @@ group :development do
 end
 
 
-gem "active_model_otp", "~> 2.2"
-
-gem "twilio-ruby", "~> 5.54"

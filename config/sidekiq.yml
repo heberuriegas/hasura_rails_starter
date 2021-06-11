@@ -2,4 +2,5 @@
 :concurrency: 5
 :queues:
   - default
+  - hasura_event
   - mailers

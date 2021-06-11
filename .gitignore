@@ -32,3 +32,6 @@
 
 # Ignore envfile
 .env
+
+# Ignore local gems used with path in Gemfile
+vendor/local_third_parties/*

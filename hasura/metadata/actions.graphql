@@ -1,0 +1,12 @@
+type Mutation {
+  send_otp (
+    phone_number: String!
+    via: String!
+    validation_hash: String
+  ): SendOtpOutput
+}
+
+type SendOtpOutput {
+  success : String!
+}
+

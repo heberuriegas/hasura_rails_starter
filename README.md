@@ -44,13 +44,13 @@ Hasura should be running in port 8080 and the rails web server port 3000
 - Graphql sign up & sign in
 - Auth webhook for jwt authentication hasura endpoints
 - Actions and events microservices
+- OTP authentication for smartphones
 
 ## TODO
 
 - Configure image uploads with active storage
 - Configure remote graphql schema
 - Configure one click heroku deploy
-- OTP authentication for smartphones
 
 ## License
 

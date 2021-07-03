@@ -111,6 +111,9 @@ GEM
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     graphql (1.12.12)
+    graphql-client (0.16.0)
+      activesupport (>= 3.0)
+      graphql (~> 1.8)
     graphql_devise (0.17.0)
       devise_token_auth (>= 0.1.43, < 2.0)
       graphql (>= 1.8, < 1.13.0)
@@ -136,6 +139,8 @@ GEM
     multipart-post (2.1.1)
     nio4r (2.5.7)
     nokogiri (1.11.7-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.11.7-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     pg (1.2.3)
@@ -226,6 +231,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-20
+  x86_64-linux
 
 DEPENDENCIES
   active_model_otp (~> 2.2)
@@ -235,6 +241,7 @@ DEPENDENCIES
   devise_token_auth (~> 1.1)
   dotenv-rails (~> 2.7)
   graphql (~> 1.12)
+  graphql-client (~> 0.16.0)
   graphql_devise (~> 0.17.0)
   graphql_playground-rails
   hasura_handler!
@@ -252,4 +259,4 @@ RUBY VERSION
    ruby 2.7.3p183
 
 BUNDLED WITH
-   2.2.17
+   2.2.18

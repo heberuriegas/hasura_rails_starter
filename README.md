@@ -37,7 +37,13 @@ docker-compose exec web rails db:migrate
 docker-compose exec web rails db:seed
 ```
 
-Hasura should be running in port 8080 and the rails web server port 3000
+5. Apply hasura metadata export
+
+```
+cd hasura && hasura metadata apply
+```
+
+Hasura should be running in port 8085 and the rails web server port 3005
 
 ## Features
 

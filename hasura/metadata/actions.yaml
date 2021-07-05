@@ -1,4 +1,12 @@
 actions:
+- name: create_direct_upload
+  definition:
+    kind: synchronous
+    handler: '{{ACTION_BASE_URL}}'
+    forward_client_headers: true
+    headers:
+    - name: X-Hasura-Service-Key
+      value_from_env: HASURA_SERVICE_KEY
 - name: send_otp
   definition:
     kind: synchronous
@@ -9,7 +17,10 @@ actions:
       value_from_env: HASURA_SERVICE_KEY
 custom_types:
   enums: []
-  input_objects: []
+  input_objects:
+  - name: SendOtpInput
+  - name: CreateDirectUploadInput
   objects:
   - name: SendOtpOutput
+  - name: CreateDirectUploadOutput
   scalars: []

@@ -1,6 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  post "/graphql", to: "graphql#execute"
   mount_graphql_devise_for 'User', at: 'graphql_auth',  operations: {
     login:    Mutations::Login,
     register:  Mutations::Register
@@ -12,6 +13,7 @@ Rails.application.routes.draw do
   
   get '/hasura/auth', to: 'auth#hasura'
   post '/hasura/auth', to: 'auth#hasura'
+  post "/graphql", to: "graphql#execute"
   mount HasuraHandler::Engine => '/hasura'
 
   if Rails.env.development?

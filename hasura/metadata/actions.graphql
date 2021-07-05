@@ -1,12 +1,33 @@
 type Mutation {
+  create_direct_upload (
+    object: CreateDirectUploadInput!
+  ): CreateDirectUploadOutput
+}
+
+type Mutation {
   send_otp (
-    phone_number: String!
-    via: String!
-    validation_hash: String
+    object: SendOtpInput!
   ): SendOtpOutput
+}
+
+input SendOtpInput {
+  phone_number : String!
+  via : String!
+  validation_hash : String
+}
+
+input CreateDirectUploadInput {
+  filename : String!
+  content_type : String!
+  checksum : String!
+  byte_size : Int!
 }
 
 type SendOtpOutput {
   success : String!
+}
+
+type CreateDirectUploadOutput {
+  direct_upload : jsonb
 }
 

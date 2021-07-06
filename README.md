@@ -51,12 +51,16 @@ Hasura should be running in port 8085 and the rails web server port 3005
 - Auth webhook for jwt authentication hasura endpoints
 - Actions and events microservices
 - OTP authentication for smartphones
+- Configure image uploads with active storage
+- Configure remote graphql schema
 
 ## TODO
 
-- Configure image uploads with active storage
-- Configure remote graphql schema
+- Oauth integration
 - Configure one click heroku deploy
+- Docs for registration and authentication with email and otp
+- Docs for actions and events microservices for hasura
+- Docs for file uploads
 
 ## License
 

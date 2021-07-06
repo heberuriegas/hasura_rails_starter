@@ -27,6 +27,7 @@ services:
       HASURA_GRAPHQL_ADMIN_SECRET: hasura
       ACTION_BASE_URL: http://api:3000/hasura/actions
       EVENT_BASE_URL: http://api:3000/hasura/events
+      BACKEND_REMOTE_SCHEMA: http://api:3000/graphql
       HASURA_SERVICE_KEY: hasura_service_key
   redis:
     image: redis:6.0-alpine

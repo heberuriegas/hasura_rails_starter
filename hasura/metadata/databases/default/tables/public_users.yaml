@@ -1,0 +1,15 @@
+table:
+  name: users
+  schema: public
+remote_relationships:
+- definition:
+    hasura_fields:
+    - id
+    remote_field:
+      files:
+        arguments:
+          attributes:
+            recordId: $id
+            recordType: User
+    remote_schema: Backend
+  name: files

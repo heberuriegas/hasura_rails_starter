@@ -1,0 +1,8 @@
+- name: Backend
+  definition:
+    url_from_env: BACKEND_REMOTE_SCHEMA
+    timeout_seconds: 60
+    headers:
+    - name: X-Hasura-Service-Key
+      value_from_env: HASURA_SERVICE_KEY
+    forward_client_headers: true

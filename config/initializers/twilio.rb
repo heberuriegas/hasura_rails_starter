@@ -1,0 +1,1 @@
+TWILIO = Twilio::REST::Client.new(ENV["TWILIO_AUTH_TOKEN"] || Rails.application.credentials.twilio[:phone_number], ENV["TWILIO_PHONE_NUMBER"] || ENV["TWILIO_AUTH_TOKEN"] || Rails.application.credentials.twilio[:auth_token]);

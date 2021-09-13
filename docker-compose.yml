@@ -1,0 +1,97 @@
+version: "3.7"
+services:
+  postgres:
+    image: postgres:12
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+    volumes:
+      - "postgres:/var/lib/postgresql/data"
+  graphql-engine:
+    image: hasura/graphql-engine:v2.0.0-beta.2
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "postgres"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_AUTH_HOOK: http://backend:3000/api/hasura/auth
+      HASURA_GRAPHQL_ADMIN_SECRET: hasura
+      ACTION_BASE_URL: http://backend:3000/api/hasura/actions
+      EVENT_BASE_URL: http://backend:3000/api/hasura/events
+      BACKEND_REMOTE_SCHEMA: http://backend:3000/graphql
+      HASURA_GRAPHQL_ENABLE_REMOTE_SCHEMA_PERMISSIONS: "true"
+      HASURA_SERVICE_KEY: hasura_service_key
+  redis:
+    image: redis:6.0-alpine
+    volumes:
+      - "redis:/data"
+  backend:
+    depends_on:
+      - "postgres"
+      - "redis"
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    command: bash -c "rm -rf tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0 -p 3000"
+    ports:
+      - "3000:3000"
+    volumes:
+      - "bundle_cache:/bundle"
+      - ".:/app"
+      - .env:/app/.env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432
+      DISABLE_SPRING: 1
+      HASURA_ENDPOINT: http://graphql-engine:8080/v1/graphql
+      HASURA_SERVICE_KEY: hasura_service_key
+    stdin_open: true
+    tty: true
+  worker:
+    depends_on:
+      - "postgres"
+      - "redis"
+      - "backend"
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    volumes:
+      - "bundle_cache:/bundle"
+      - ".:/app"
+      - .env:/app/.env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432
+      DISABLE_SPRING: 1
+      HASURA_SERVICE_KEY: hasura_service_key
+    stdin_open: true
+    tty: true
+  webpacker:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    environment:
+      - NODE_ENV=development
+      - RAILS_ENV=development
+      - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
+    command: ./bin/webpack-dev-server
+    volumes:
+      - "bundle_cache:/bundle"
+      - ".:/app"
+    ports:
+      - "3035:3035"
+
+volumes:
+  redis:
+  postgres:
+  bundle_cache:

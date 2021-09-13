@@ -1,0 +1,18 @@
+<div id="login">
+  <h2><%= active_admin_application.site_title(self) %> <%= title t('active_admin.devise.sign_up.title') %></h2>
+
+  <% scope = Devise::Mapping.find_scope!(resource_name) %>
+  <%= render partial: "active_admin/devise/shared/error_messages", resource: resource %>
+  <%= active_admin_form_for(resource, as: resource_name, url: send(:"#{scope}_registration_path"), html: { id: "registration_new" }) do |f|
+    f.inputs do
+      f.input :email, label: t('active_admin.devise.email.title'), input_html: { autofocus: true }
+      f.input :password, label: t('active_admin.devise.password.title')
+      f.input :password_confirmation, label: t('active_admin.devise.password_confirmation.title')
+    end
+    f.actions do
+      f.action :submit, label: t('active_admin.devise.login.submit'), button_html: { value: t('active_admin.devise.sign_up.submit') }
+    end
+  end
+  %>
+  <%= render partial: "active_admin/devise/shared/links" %>
+</div>

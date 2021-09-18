@@ -27,23 +27,22 @@ cp env.sample .env
 3. Build containers
 
 ```
-docker-compose build
+docker-compose up
 ```
 
 4. Run migrations and seeds
 
 ```
-docker-compose exec web rails db:migrate
-docker-compose exec web rails db:seed
+docker-compose exec backend rails db:setup
 ```
 
 5. Apply hasura metadata export
 
 ```
-cd hasura && hasura metadata apply
+hasura metadata apply --project hasura
 ```
 
-Hasura should be running in port 8085 and the rails web server port 3005
+Hasura should be running in port 8080 and the rails web server port 3000
 
 ## Features
 

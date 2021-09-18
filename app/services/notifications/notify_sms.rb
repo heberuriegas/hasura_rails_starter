@@ -10,7 +10,7 @@ class Notifications::NotifySms < Aldous::Service
   def perform
     TWILIO.messages.create(
       body: message,
-      from: '+14159159129',
+      from: TWILIO_PHONE_NUMBER,
       to: "+#{phone_number}"
     )
     return Result::Success.new

@@ -2,12 +2,14 @@ require 'sidekiq/web'
 require 'api_constraints'
 
 Rails.application.routes.draw do
+  devise_config = ActiveAdmin::Devise.config
+  devise_config[:controllers][:omniauth_callbacks] = 'omniauth_callbacks'
+  devise_for :users, devise_config
   begin
     ActiveAdmin.routes(self)
-  rescue Exception => e
+  rescue StandardError => e
     puts "ActiveAdmin: #{e.class}: #{e}"
   end
-  devise_for :users, ActiveAdmin::Devise.config
 
   mount_graphql_devise_for 'User', at: 'graphql_auth',  operations: {
     login:    Mutations::Login,

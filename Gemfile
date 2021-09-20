@@ -34,6 +34,12 @@ gem 'devise_token_auth', '~> 1.1'
 gem 'graphql', '~> 1.12'
 gem 'graphql_devise', '~> 0.17.0'
 gem 'graphql_playground-rails'
+gem "omniauth", "~> 2.0"
+gem "omniauth-rails_csrf_protection", "~> 1.0"
+# gem 'omniauth-github'
+# gem 'omniauth-facebook'
+# gem 'omniauth-google-oauth2'
+# gem 'omniauth-apple'
 gem 'hasura_handler', git: 'https://github.com/woohoou/HasuraHandler.git'
 gem "graphql-client", "~> 0.16.0"
 gem 'active_model_otp', '~> 2.2'
@@ -73,3 +79,5 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+

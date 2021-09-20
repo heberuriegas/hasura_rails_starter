@@ -52,6 +52,7 @@ Hasura should be running in port 8080 and the rails web server port 3000
 - OTP authentication for smartphones
 - Configure image uploads with active storage
 - Configure remote graphql schema
+- OAuth integration with omniauth
 
 ## Deploy to heroku
 
@@ -59,9 +60,9 @@ Hasura should be running in port 8080 and the rails web server port 3000
 
 ## TODO
 
-- OAuth integration
 - Configure one click heroku deploy
 - Docs for registration and authentication with email and otp
+- Docs for oauth
 - Docs for actions and events microservices for hasura
 - Docs for file uploads
 

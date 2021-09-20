@@ -15,6 +15,8 @@ class User < ApplicationRecord
       phone_number: false,
     }
   include GraphqlDevise::Concerns::Model
+  # Devise omniauthable redefinition is required https://github.com/lynndylanhurley/devise_token_auth/issues/666
+  devise :omniauthable, omniauth_providers: %i[]
 
   scope :active, -> { where(is_active: true) }
   validates :email, uniqueness: true, allow_blank: true
@@ -75,6 +77,19 @@ class User < ApplicationRecord
       Notifications::NotifyWhatsapp.perform(self.phone_number, I18n.t('notifications.send_whatsapp_otp', code: self.otp_code))
     end
   end
+
+  # Devise override to ignore the password requirement if the user is authenticated with Google
+  def password_required?
+    provider.present? ? false : super
+  end
+
+  def self.from_omniauth(auth)
+    user = where(email: auth.info.email).first || where(where(provider: auth.provider, uid: auth.uid)).first || new
+    user.update provider: auth.provider, uid: auth.uid, email: auth.info.email
+    user.name ||= auth.info.name # note: Devise seems to wrap this in the DB write for session info
+    user
+  end
+
   protected
   def destroy_expired_tokens
     if tokens

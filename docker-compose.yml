@@ -54,6 +54,7 @@ services:
       DISABLE_SPRING: 1
       HASURA_ENDPOINT: http://graphql-engine:8080/v1/graphql
       HASURA_SERVICE_KEY: hasura_service_key
+      HASURA_GRAPHQL_ADMIN_SECRET: hasura
     stdin_open: true
     tty: true
   worker:
@@ -73,7 +74,9 @@ services:
       REDIS_URL: redis://redis:6379/0
       DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432
       DISABLE_SPRING: 1
+      HASURA_ENDPOINT: http://graphql-engine:8080/v1/graphql
       HASURA_SERVICE_KEY: hasura_service_key
+      HASURA_GRAPHQL_ADMIN_SECRET: hasura
     stdin_open: true
     tty: true
   webpacker:

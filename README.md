@@ -36,7 +36,13 @@ docker-compose up
 docker-compose exec backend rails db:setup
 ```
 
-5. Apply hasura metadata export
+5. Install node packages
+
+```
+yarn
+```
+
+6. Apply hasura metadata export
 
 ```
 hasura metadata apply --project hasura

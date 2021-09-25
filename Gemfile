@@ -36,7 +36,7 @@ gem 'graphql_devise', '~> 0.17.0'
 gem 'graphql_playground-rails'
 gem "omniauth", "~> 2.0"
 gem "omniauth-rails_csrf_protection", "~> 1.0"
-# gem 'omniauth-github'
+gem 'omniauth-github'
 # gem 'omniauth-facebook'
 # gem 'omniauth-google-oauth2'
 # gem 'omniauth-apple'
@@ -81,3 +81,5 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 
+
+gem "octokit", "~> 4.21"

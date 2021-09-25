@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     login:    Mutations::Login,
     register:  Mutations::Register,
   }
+
   post "/graphql", to: "graphql#execute"
 
   namespace :api, defaults: {format: 'json'} do

@@ -16,7 +16,7 @@ class User < ApplicationRecord
     }
   include GraphqlDevise::Concerns::Model
   # Devise omniauthable redefinition is required https://github.com/lynndylanhurley/devise_token_auth/issues/666
-  devise :omniauthable, omniauth_providers: %i[]
+  devise :omniauthable, omniauth_providers: %i[github]
 
   scope :active, -> { where(is_active: true) }
   validates :email, uniqueness: true, allow_blank: true
@@ -24,6 +24,9 @@ class User < ApplicationRecord
   
   before_create :set_default_role
   before_validation :set_default_uid
+
+  has_many :identities
+
 
   ROLES = {
     admin: 'admin',
@@ -83,8 +86,12 @@ class User < ApplicationRecord
     provider.present? ? false : super
   end
 
+  def self.create_with_omniauth(info)
+    create(name: info['name'])
+  end
+
   def self.from_omniauth(auth)
-    user = where(email: auth.info.email).first || where(where(provider: auth.provider, uid: auth.uid)).first || new
+    user = where(email: auth.info.email).first || where(identities: { provider: auth.provider, uid: auth.uid }).first || new
     user.update provider: auth.provider, uid: auth.uid, email: auth.info.email
     user.name ||= auth.info.name # note: Devise seems to wrap this in the DB write for session info
     user

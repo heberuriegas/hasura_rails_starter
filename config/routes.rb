@@ -2,6 +2,7 @@ require 'sidekiq/web'
 require 'api_constraints'
 
 Rails.application.routes.draw do
+  use_doorkeeper
   devise_config = ActiveAdmin::Devise.config
   devise_config[:controllers][:omniauth_callbacks] = 'omniauth_callbacks'
   devise_for :users, devise_config

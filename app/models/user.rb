@@ -1,3 +1,6 @@
+Doorkeeper::AccessGrant
+Doorkeeper::AccessToken
+
 class User < ApplicationRecord
   has_one_time_password length: 6
 
@@ -17,6 +20,16 @@ class User < ApplicationRecord
   include GraphqlDevise::Concerns::Model
   # Devise omniauthable redefinition is required https://github.com/lynndylanhurley/devise_token_auth/issues/666
   devise :omniauthable, omniauth_providers: %i[]
+
+  has_many :access_grants,
+    class_name: 'Doorkeeper::AccessGrant',
+    foreign_key: :resource_owner_id,
+    dependent: :delete_all
+
+  has_many :access_tokens, 
+    class_name: 'Doorkeeper::AccessGrant',
+    foreign_key: :resource_owner_id,
+    dependent: :delete_all
 
   scope :active, -> { where(is_active: true) }
   validates :email, uniqueness: true, allow_blank: true

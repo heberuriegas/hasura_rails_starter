@@ -1,7 +1,7 @@
 module Api
   module V1
     class AuthController < Api::BaseController
-      before_action :authenticate_user!, except: [:hasura, :refresh_token]
+      before_action :doorkeeper_authorize!, except: [:hasura, :refresh_token]
 
       def hasura
         @response = {
@@ -18,6 +18,10 @@ module Api
         render json: @response
       end
 
+      def me
+        render json: current_resource_owner, status: 202
+      end
+
       def user
         render json: current_user, status: 202
       end 
@@ -25,7 +29,7 @@ module Api
       def refresh_token
         status = false
         if (uid = request.headers['uid']).present? && (client = request.headers['client']).present?
-          if (user = User.active.find_by(uid: uid)).present?
+          if (user = User.active.find_by(email: uid, phone_number: uid)).present?
             if user.tokens[client].present? && DeviseTokenAuth::Concerns::User.tokens_match?(user.tokens[client]['last_token'], request.headers['access-token'])
               credentials = user.create_new_auth_token(client)
 
@@ -44,6 +48,11 @@ module Api
         else
           head :unauthorized
         end
+      end
+
+      private
+      def current_resource_owner
+        User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
       end
     end
   end

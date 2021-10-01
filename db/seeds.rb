@@ -11,4 +11,5 @@ User.create_with(
   password: ENV["ADMIN_PASSWORD"] || Rails.application.credentials.admin[:password],
   password_confirmation: ENV["ADMIN_PASSWORD"] || Rails.application.credentials.admin[:password],
   phone_number: ENV["ADMIN_PHONE_NUMBER"] || Rails.application.credentials.admin[:phone_number],
+  role: 'admin',
 ).find_or_create_by(email: ENV["ADMIN_EMAIL"] || Rails.application.credentials.admin[:email])

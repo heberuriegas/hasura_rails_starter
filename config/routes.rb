@@ -3,9 +3,8 @@ require 'api_constraints'
 
 Rails.application.routes.draw do
   use_doorkeeper
-  devise_config = ActiveAdmin::Devise.config
-  devise_config[:controllers][:omniauth_callbacks] = 'omniauth_callbacks'
-  devise_for :users, devise_config
+  devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
+  devise_for :admin_users, ActiveAdmin::Devise.config
   begin
     ActiveAdmin.routes(self)
   rescue StandardError => e

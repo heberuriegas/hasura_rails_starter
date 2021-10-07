@@ -7,14 +7,18 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    # raise "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
     # Put your resource owner authentication logic here.
     # Example implementation:
     # User.find_by(id: session[:user_id]) || redirect_to(new_user_session_url)
+    current_user || warden.authenticate!(scope: :user)
+  end
 
-    # TODO: select user
-    User.first
-    # current_user || warden.authenticate!(scope: :user)
+  # In this flow, a token is requested in exchange for the resource owner credentials (username and password)
+  resource_owner_from_credentials do |routes|
+    user = User.find_for_database_authentication(:email => params[:email])
+    if user && user.valid_for_authentication? { user.valid_password?(params[:password]) }
+      user
+    end
   end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
@@ -433,9 +437,10 @@ Doorkeeper.configure do
   # so that the user skips the authorization step.
   # For example if dealing with a trusted application.
   #
-  # skip_authorization do |resource_owner, client|
-  #   client.superapp? or resource_owner.admin?
-  # end
+  skip_authorization do |resource_owner, client|
+    # client.superapp? or resource_owner.admin?
+    true
+  end
 
   # Configure custom constraints for the Token Introspection request.
   # By default this configuration option allows to introspect a token by another

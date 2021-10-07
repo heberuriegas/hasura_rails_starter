@@ -19,7 +19,7 @@ class User < ApplicationRecord
     }
   include GraphqlDevise::Concerns::Model
   # Devise omniauthable redefinition is required https://github.com/lynndylanhurley/devise_token_auth/issues/666
-  devise :omniauthable, omniauth_providers: %i[]
+  devise :omniauthable, omniauth_providers: %i[github]
 
   has_many :access_grants,
     class_name: 'Doorkeeper::AccessGrant',
@@ -37,16 +37,7 @@ class User < ApplicationRecord
   
   before_create :set_default_role
   before_validation :set_default_uid
-
-  ROLES = {
-    admin: 'admin',
-    user: 'user'
-  }
-
-  def admin?
-    self.role == 'admin'
-  end
-
+  
   def email_required?
     false
   end

@@ -4,7 +4,7 @@ require 'api_constraints'
 Rails.application.routes.draw do
   use_doorkeeper
   devise_for :users, :controllers => {
-    :omniauth_callbacks => "omniauth_callbacks",
+    :omniauth_callbacks => "users/omniauth_callbacks",
     :registrations => 'users/registrations',
   }
   devise_for :admin_users, ActiveAdmin::Devise.config

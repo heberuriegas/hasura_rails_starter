@@ -19,7 +19,7 @@ module Api
       end
 
       def me
-        render json: current_resource_owner, status: 202
+        render json: current_user, status: 202
       end
 
       def user

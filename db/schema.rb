@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_07_131002) do
+ActiveRecord::Schema.define(version: 2021_10_09_234936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -80,6 +80,8 @@ ActiveRecord::Schema.define(version: 2021_10_07_131002) do
     t.datetime "created_at", null: false
     t.datetime "revoked_at"
     t.string "scopes", default: "", null: false
+    t.string "code_challenge"
+    t.string "code_challenge_method"
     t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
     t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
     t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
@@ -113,9 +115,16 @@ ActiveRecord::Schema.define(version: 2021_10_07_131002) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "oauth_assertions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "provider", null: false
+    t.string "uid", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_oauth_assertions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
-    t.string "provider", default: "email", null: false
-    t.string "uid", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -126,10 +135,8 @@ ActiveRecord::Schema.define(version: 2021_10_07_131002) do
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.string "name"
-    t.string "nickname"
     t.string "image"
     t.string "email"
-    t.json "tokens"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "role"
@@ -140,7 +147,6 @@ ActiveRecord::Schema.define(version: 2021_10_07_131002) do
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -149,4 +155,5 @@ ActiveRecord::Schema.define(version: 2021_10_07_131002) do
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "oauth_assertions", "users"
 end

@@ -1,6 +1,3 @@
-Doorkeeper::AccessGrant
-Doorkeeper::AccessToken
-
 class User < ApplicationRecord
   has_one_time_password length: 6
 
@@ -13,13 +10,12 @@ class User < ApplicationRecord
     :recoverable,
     :rememberable,
     :validatable,
+    :omniauthable,
+    :omniauth_providers => %i[github],
     :authentication_keys => {
       email: false,
       phone_number: false,
     }
-  include GraphqlDevise::Concerns::Model
-  # Devise omniauthable redefinition is required https://github.com/lynndylanhurley/devise_token_auth/issues/666
-  devise :omniauthable, omniauth_providers: %i[github]
 
   has_many :access_grants,
     class_name: 'Doorkeeper::AccessGrant',
@@ -27,49 +23,25 @@ class User < ApplicationRecord
     dependent: :delete_all
 
   has_many :access_tokens, 
-    class_name: 'Doorkeeper::AccessGrant',
+    class_name: 'Doorkeeper::AccessToken',
     foreign_key: :resource_owner_id,
+    dependent: :delete_all
+  
+  has_many :assertions,
+    class_name: 'OAuth2::Assertion',
     dependent: :delete_all
 
   scope :active, -> { where(is_active: true) }
   validates :email, uniqueness: true, allow_blank: true
   validates :phone_number, uniqueness: true, allow_blank: true
   
-  before_create :set_default_role
-  before_validation :set_default_uid
-  
   def email_required?
-    false
+    !(phone_number.present? || assertions.present?)
   end
 
-  def email_changed?
-    false
-  end
-
-  def create_token(client: nil, lifespan: nil, cost: nil, **token_extras)
-    token = DeviseTokenAuth::TokenFactory.create(client: client, lifespan: lifespan, cost: cost)
-
-    tokens[token.client] = {
-      token:  token.token_hash,
-      last_token: token.token_hash,
-      expiry: token.expiry
-    }.merge!(token_extras.except(:last_token))
-
-    clean_old_tokens
-
-    token
-  end
-
-  def create_new_auth_token(client = nil)
-    now = Time.zone.now
-
-    token = create_token(
-      client: client,
-      last_token: tokens.fetch(client, {})['token'],
-      updated_at: now
-    )
-
-    update_auth_header(token.token, token.client)
+  # Devise override to ignore the password requirement if the user is authenticated with Google
+  def password_required?
+    !email_required? ? false : super
   end
 
   def send_otp(via = 'sms', validation_hash = nil)
@@ -82,34 +54,10 @@ class User < ApplicationRecord
     end
   end
 
-  # Devise override to ignore the password requirement if the user is authenticated with Google
-  def password_required?
-    provider.present? ? false : super
-  end
-
   def self.from_omniauth(auth)
     user = where(email: auth.info.email).first || where(where(provider: auth.provider, uid: auth.uid)).first || new
     user.update provider: auth.provider, uid: auth.uid, email: auth.info.email
     user.name ||= auth.info.name # note: Devise seems to wrap this in the DB write for session info
     user
-  end
-
-  protected
-  def destroy_expired_tokens
-    if tokens
-      tokens.delete_if do |cid, v|
-        expiry = v[:expiry] || v['expiry']
-        DateTime.strptime(expiry.to_s, '%s') < Time.zone.now && !v[:last_token]
-      end
-    end
-  end
-
-  private
-  def set_default_role
-    self.role = ROLES[:user] unless self.role?
-  end
-
-  def set_default_uid
-    self.uid = self.email || self.phone_number
-  end
+  end 
 end

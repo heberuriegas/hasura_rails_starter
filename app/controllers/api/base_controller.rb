@@ -7,5 +7,9 @@ module Api
     rescue_from StandardError do |e|
       render json: { error: e }, status: 500
     end
+
+    def current_user
+      current_resource_owner
+    end
   end
 end

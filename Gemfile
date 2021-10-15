@@ -83,3 +83,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 
 gem "doorkeeper", "~> 5.5"
+
+gem "doorkeeper-grants_assertion", "~> 0.3.1"
+
+gem "octokit", "~> 4.21"

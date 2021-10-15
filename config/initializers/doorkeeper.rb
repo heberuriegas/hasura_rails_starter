@@ -15,9 +15,34 @@ Doorkeeper.configure do
 
   # In this flow, a token is requested in exchange for the resource owner credentials (username and password)
   resource_owner_from_credentials do |routes|
-    user = User.find_for_database_authentication(:email => params[:email])
-    if user && user.valid_for_authentication? { user.valid_password?(params[:password]) }
-      user
+    if params[:email].present?
+      user = User.active.find_for_database_authentication(email: params[:email])
+      if user.present? && user.valid_for_authentication? { user.valid_password?(params[:password]) }
+        user
+      end
+    elsif params[:phone_number].present?
+      user = User.active.find_by(phone_number: params[:phone_number])
+      if user && user.authenticate_otp(params[:otp_code], drift: 600)
+        user
+      end
+    end
+  end
+
+  resource_owner_from_assertion do
+    if server.client && params[:provider] && params[:assertion]
+      case params[:provider]
+      when 'github'
+        client = Octokit::Client.new(access_token: params[:assertion])
+
+        assertion = OAuth2::Assertion.find_by(uid: client.user[:id], provider: 'github')
+
+        unless assertion.present?
+          assertion = OAuth2::Assertion.new(uid: client.user[:id], provider: 'github')
+          User.create(name: client.user[:name], email: client.user[:email], assertions: [assertion])
+        end
+        
+        assertion.user
+      end
     end
   end
 
@@ -30,10 +55,8 @@ Doorkeeper.configure do
     # Put your admin authentication logic here.
     # Example implementation:
   
-    if current_user
-      head :forbidden unless current_user.admin?
-    else
-      redirect_to new_user_session_url
+    unless current_admin_user
+      redirect_to new_admin_user_session_url
     end
   end
 
@@ -223,7 +246,7 @@ Doorkeeper.configure do
   # `grant_type` - the grant type of the request (see Doorkeeper::OAuth)
   # `scopes` - the requested scopes (see Doorkeeper::OAuth::Scopes)
   #
-  # use_refresh_token
+  use_refresh_token
 
   # Provide support for an owner to be assigned to each registered application (disabled by default)
   # Optional parameter confirmation: true (default: false) if you want to enforce ownership of
@@ -356,7 +379,7 @@ Doorkeeper.configure do
   #   https://datatracker.ietf.org/doc/html/rfc6819#section-4.4.2
   #   https://datatracker.ietf.org/doc/html/rfc6819#section-4.4.3
   #
-  grant_flows %w[authorization_code password]
+  grant_flows %w[authorization_code password assertion]
 
   # Allows to customize OAuth grant flows that +each+ application support.
   # You can configure a custom block (or use a class respond to `#call`) that must
@@ -499,4 +522,13 @@ Doorkeeper.configure do
   # WWW-Authenticate Realm (default: "Doorkeeper").
   #
   # realm "Doorkeeper"
+end
+
+Doorkeeper::AccessToken.instance_eval do
+  def generate_refresh_token
+    loop do
+      token = SecureRandom.hex(32)
+      break token unless Doorkeeper::AccessToken.exists?(refresh_token: token)
+    end
+  end
 end

@@ -3,7 +3,10 @@ require 'api_constraints'
 
 Rails.application.routes.draw do
   use_doorkeeper
-  devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
+  devise_for :users, :controllers => {
+    :omniauth_callbacks => "omniauth_callbacks",
+    :registrations => 'users/registrations',
+  }
   devise_for :admin_users, ActiveAdmin::Devise.config
   begin
     ActiveAdmin.routes(self)
@@ -11,10 +14,6 @@ Rails.application.routes.draw do
     puts "ActiveAdmin: #{e.class}: #{e}"
   end
 
-  mount_graphql_devise_for 'User', at: 'graphql_auth',  operations: {
-    login:    Mutations::Login,
-    register:  Mutations::Register,
-  }
   post "/graphql", to: "graphql#execute"
 
   namespace :api, defaults: {format: 'json'} do
@@ -29,7 +28,7 @@ Rails.application.routes.draw do
   end
 
   if Rails.env.development?
-    mount GraphqlPlayground::Rails::Engine, at: "/graphql_playground", graphql_path: "/graphql_auth"
+    mount GraphqlPlayground::Rails::Engine, at: "/graphql_playground", graphql_path: "/graphql"
   end
 
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|

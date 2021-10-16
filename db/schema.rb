@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_09_234936) do
+ActiveRecord::Schema.define(version: 2021_10_16_122830) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -115,13 +115,13 @@ ActiveRecord::Schema.define(version: 2021_10_09_234936) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
-  create_table "oauth_assertions", force: :cascade do |t|
-    t.bigint "user_id", null: false
+  create_table "oauth_identities", force: :cascade do |t|
     t.string "provider", null: false
     t.string "uid", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_oauth_assertions_on_user_id"
+    t.index ["user_id"], name: "index_oauth_identities_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -155,5 +155,5 @@ ActiveRecord::Schema.define(version: 2021_10_09_234936) do
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
-  add_foreign_key "oauth_assertions", "users"
+  add_foreign_key "oauth_identities", "users"
 end

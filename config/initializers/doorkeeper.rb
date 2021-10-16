@@ -34,14 +34,9 @@ Doorkeeper.configure do
       when 'github'
         client = Octokit::Client.new(access_token: params[:assertion])
 
-        assertion = OAuth2::Assertion.find_by(uid: client.user[:id], provider: 'github')
-
-        unless assertion.present?
-          assertion = OAuth2::Assertion.new(uid: client.user[:id], provider: 'github')
-          User.create(name: client.user[:name], email: client.user[:email], assertions: [assertion])
+        if client&.user&.present?
+          User.from_identity(client.user.to_h.merge(provider: 'github'))
         end
-        
-        assertion.user
       end
     end
   end

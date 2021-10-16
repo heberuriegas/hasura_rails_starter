@@ -20,23 +20,23 @@ class User < ApplicationRecord
   has_many :access_grants,
     class_name: 'Doorkeeper::AccessGrant',
     foreign_key: :resource_owner_id,
-    dependent: :delete_all
+    dependent: :destroy
 
   has_many :access_tokens, 
     class_name: 'Doorkeeper::AccessToken',
     foreign_key: :resource_owner_id,
-    dependent: :delete_all
+    dependent: :destroy
   
-  has_many :assertions,
-    class_name: 'OAuth2::Assertion',
-    dependent: :delete_all
+  has_many :identities,
+    class_name: 'OAuth2::Identity',
+    dependent: :destroy
 
   scope :active, -> { where(is_active: true) }
   validates :email, uniqueness: true, allow_blank: true
   validates :phone_number, uniqueness: true, allow_blank: true
   
   def email_required?
-    !(phone_number.present? || assertions.present?)
+    !(phone_number.present? || identities.present?)
   end
 
   # Devise override to ignore the password requirement if the user is authenticated with Google
@@ -54,10 +54,23 @@ class User < ApplicationRecord
     end
   end
 
-  def self.from_omniauth(auth)
-    user = where(email: auth.info.email).first || where(where(provider: auth.provider, uid: auth.uid)).first || new
-    user.update provider: auth.provider, uid: auth.uid, email: auth.info.email
-    user.name ||= auth.info.name # note: Devise seems to wrap this in the DB write for session info
-    user
+  def self.from_identity(options={})
+    uid, provider, email, name = options[:uid] || options[:id], options[:provider], options[:email], options[:name]
+    raise "Uid is not present" unless uid.present?
+    raise "Provider is not present" unless provider.present?
+
+    identity = OAuth2::Identity.find_by(uid: uid, provider: provider)
+    unless identity.present?
+      identity = OAuth2::Identity.new(uid: uid, provider: provider)
+
+      user = options[:email].present? ? User.find_by(email: options[:email]) : nil
+      if user.nil?
+        user = User.create(name: name, email: email, identities: [identity])
+      else
+        identity.user = user
+        identity.save
+      end
+    end
+    identity.user
   end 
 end

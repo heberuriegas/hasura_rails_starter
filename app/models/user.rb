@@ -4,12 +4,13 @@ class User < ApplicationRecord
   has_one_attached :avatar
 
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable,
     :registerable,
     :recoverable,
     :rememberable,
     :validatable,
+    :confirmable,
     :omniauthable,
     :omniauth_providers => %i[github],
     :authentication_keys => {
@@ -34,6 +35,9 @@ class User < ApplicationRecord
   scope :active, -> { where(is_active: true) }
   validates :email, uniqueness: true, allow_blank: true
   validates :phone_number, uniqueness: true, allow_blank: true
+  validates :username, uniqueness: true, allow_blank: true
+
+  before_create :skip_confirmation!, if: -> { !email_required? }
   
   def email_required?
     !(phone_number.present? || identities.present?)

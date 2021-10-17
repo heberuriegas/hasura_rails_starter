@@ -9,7 +9,7 @@ module Users
     # POST /users
     def create
       build_resource(sign_up_params)
-  
+      
       resource.save
       yield resource if block_given?
       if resource.persisted?
@@ -39,7 +39,7 @@ module Users
     protected
     
     def configure_sign_up_params
-      devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+      devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :username])
     end
   end
 end

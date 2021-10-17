@@ -6,7 +6,7 @@ module Tokenable
     private
 
     def get_credentials
-      application = Doorkeeper::Application.find_by(uid: request.headers[:'Client-Id'] || params[:client_id], secret: request.headers[:'Client-Secret'] || params[:client_secret])
+      application = Doorkeeper::Application.find_by(uid: request.headers[:'Client-Id'] || params[:client_id])
 
       if application.present?
         access_token = Doorkeeper::AccessToken.create(

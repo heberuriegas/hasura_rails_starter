@@ -135,6 +135,7 @@ ActiveRecord::Schema.define(version: 2021_10_16_122830) do
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.string "name"
+    t.string "username"
     t.string "image"
     t.string "email"
     t.datetime "created_at", precision: 6, null: false
@@ -147,6 +148,7 @@ ActiveRecord::Schema.define(version: 2021_10_16_122830) do
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

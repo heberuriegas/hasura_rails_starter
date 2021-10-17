@@ -17,7 +17,7 @@ Doorkeeper.configure do
   resource_owner_from_credentials do |routes|
     if params[:email].present?
       user = User.active.find_for_database_authentication(email: params[:email])
-      if user.present? && user.valid_for_authentication? { user.valid_password?(params[:password]) }
+      if user.present? && user.valid_for_authentication? { user.valid_password?(params[:password]) } && user.active_for_authentication?
         user
       end
     elsif params[:phone_number].present?

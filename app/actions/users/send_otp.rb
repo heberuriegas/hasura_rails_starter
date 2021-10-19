@@ -1,4 +1,4 @@
-class SendOtp < HasuraHandler::Action
+class Users::SendOtp < HasuraHandler::Action
   action_name :send_otp
 
   def run

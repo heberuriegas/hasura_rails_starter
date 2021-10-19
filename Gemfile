@@ -87,3 +87,5 @@ gem "doorkeeper", "~> 5.5"
 gem "doorkeeper-grants_assertion", "~> 0.3.1"
 
 gem "octokit", "~> 4.21"
+
+gem "active_model_serializers", "~> 0.10.12"

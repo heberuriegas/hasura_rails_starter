@@ -19,7 +19,6 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'} do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
       get '/auth/user', to: 'auth#user'
-      get '/auth/refresh_token', to: 'auth#refresh_token'
       
       get '/hasura/auth', to: 'auth#hasura'
       post '/hasura/auth', to: 'auth#hasura'

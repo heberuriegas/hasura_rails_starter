@@ -9,7 +9,7 @@ module Api
     end
 
     def current_user
-      current_resource_owner
+      User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token &&  valid_doorkeeper_token?
     end
   end
 end

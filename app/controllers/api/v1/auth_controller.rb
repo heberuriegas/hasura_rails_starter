@@ -7,7 +7,6 @@ module Api
         @response = {
           "X-Hasura-Role": 'anonymous',
         }
-
         if current_user && current_user.is_active?
           @response = {
             "X-Hasura-User-Id": current_user.id.to_s,
@@ -19,11 +18,6 @@ module Api
 
       def user
         render json: current_user, status: 202
-      end
-
-      private
-      def current_resource_owner
-        User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
       end
     end
   end

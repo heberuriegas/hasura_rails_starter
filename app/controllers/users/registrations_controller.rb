@@ -22,7 +22,7 @@ module Users
             credentials = get_credentials
             respond_with({ resource_name => resource, credentials: credentials }, location: after_sign_up_path_for(resource))
           else
-            respond_with resource, location: after_sign_up_path_for(resource)
+            respond_with({ resource_name => resource }, location: after_sign_up_path_for(resource))
           end
         else
           set_flash_message! :notice, :"signed_up_but_#{resource.inactive_message}"

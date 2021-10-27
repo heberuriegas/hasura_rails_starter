@@ -38,6 +38,7 @@ class User < ApplicationRecord
   validates :username, uniqueness: true, allow_blank: true
 
   before_create :skip_confirmation!, if: -> { !email_required? }
+  after_create :send_otp, if: -> { !email_required? && phone_number.present? }
   
   def email_required?
     !(phone_number.present? || identities.present?)

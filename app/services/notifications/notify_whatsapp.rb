@@ -11,7 +11,7 @@ class Notifications::NotifyWhatsapp < Aldous::Service
     TWILIO.messages.create(
       body: message,
       from: "whatsapp:#{TWILIO_PHONE_NUMBER}",
-      to: "whatsapp:+#{phone_number}"
+      to: "whatsapp:#{phone_number}"
     )
     return Result::Success.new
   end

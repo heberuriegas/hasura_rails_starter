@@ -23,6 +23,9 @@ Rails.application.routes.draw do
       
       get '/hasura/auth', to: 'auth#hasura'
       post '/hasura/auth', to: 'auth#hasura'
+
+      post '/auth/send_otp', to: 'auth#send_otp'
+      
       mount HasuraHandler::Engine => '/hasura'
     end
   end

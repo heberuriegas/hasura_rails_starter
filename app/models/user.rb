@@ -38,8 +38,11 @@ class User < ApplicationRecord
   validates :username, uniqueness: true, allow_blank: true
 
   before_create :skip_confirmation!, if: -> { !email_required? }
-  after_create :send_otp, if: -> { !email_required? && phone_number.present? }
   
+  def auth_by_phone_number?
+    !email_required? && phone_number.present?
+  end
+
   def email_required?
     !(phone_number.present? || identities.present?)
   end
@@ -49,7 +52,10 @@ class User < ApplicationRecord
     !email_required? ? false : super
   end
 
-  def send_otp(via = 'sms', validation_hash = nil)
+  def send_otp(options = {})
+    options.reverse_merge!(via: 'sms', validation_hash: nil)
+    via, validation_hash = *options.values_at(:via, :validation_hash)
+    
     if via == 'sms' || via == 'both'
       Notifications::NotifySms.perform(self.phone_number, validation_hash.present? ? I18n.t('notifications.send_sms_otp_with_hash', code: self.otp_code, validation_hash: validation_hash) : I18n.t('notifications.send_sms_otp', code: self.otp_code))
     end

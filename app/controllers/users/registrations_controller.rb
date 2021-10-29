@@ -8,12 +8,18 @@ module Users
 
     # POST /users
     def create
-      build_resource(sign_up_params)
+      if !sign_up_params[:email].present? && sign_up_params[:phone_number].present?
+        create_resource_with_phone_number(sign_up_params)
+      else
+        build_resource(sign_up_params)
+        resource.save
+      end
       
-      resource.save
       yield resource if block_given?
       if resource.persisted?
-        if resource.active_for_authentication?
+        if resource.auth_by_phone_number?
+          respond_with({ resource_name => { phone_number: resource.phone_number } }, location: after_sign_up_path_for(resource))
+        elsif resource.active_for_authentication?
           set_flash_message! :notice, :signed_up
           sign_up(resource_name, resource)
 
@@ -37,6 +43,10 @@ module Users
     end
 
     protected
+
+    def create_resource_with_phone_number(sign_up_params)
+      self.resource = self.resource_class.create_with(sign_up_params.except(:phone_number)).find_or_create_by(phone_number: sign_up_params[:phone_number])
+    end
     
     def configure_sign_up_params
       devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :username])

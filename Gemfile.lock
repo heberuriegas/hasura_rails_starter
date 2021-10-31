@@ -166,10 +166,6 @@ GEM
     graphql-client (0.16.0)
       activesupport (>= 3.0)
       graphql (~> 1.8)
-    graphql_devise (0.17.1)
-      devise_token_auth (>= 0.1.43, < 2.0)
-      graphql (>= 1.8, < 1.13.0)
-      rails (>= 4.2, < 6.2)
     graphql_playground-rails (2.1.0)
       rails (>= 5.1.0)
     has_scope (0.8.0)
@@ -408,7 +404,6 @@ DEPENDENCIES
   dotenv-rails (~> 2.7)
   graphql (~> 1.12)
   graphql-client (~> 0.16.0)
-  graphql_devise (~> 0.17.0)
   graphql_playground-rails
   hasura_handler!
   listen (~> 3.3)

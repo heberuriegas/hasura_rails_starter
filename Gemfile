@@ -32,7 +32,6 @@ gem 'sidekiq', '~> 6.2'
 gem 'devise', '~> 4.8'
 gem 'devise_token_auth', '~> 1.1'
 gem 'graphql', '~> 1.12'
-gem 'graphql_devise', '~> 0.17.0'
 gem 'graphql_playground-rails'
 gem "omniauth", "~> 2.0"
 gem "omniauth-rails_csrf_protection", "~> 1.0"

@@ -4,6 +4,7 @@ class UserSerializer < ActiveModel::Serializer
   attributes :username
   attributes :email
   attributes :phone_number
+  attributes :avatar_url
   attributes :created_at
   attributes :updated_at
 end

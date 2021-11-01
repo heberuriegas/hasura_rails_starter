@@ -27,6 +27,8 @@ Rails.application.routes.draw do
       post '/auth/send_otp', to: 'auth#send_otp'
       
       mount HasuraHandler::Engine => '/hasura'
+
+      resources :direct_uploads, only: [:create]
     end
   end
 

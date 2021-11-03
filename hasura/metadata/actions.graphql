@@ -4,10 +4,8 @@ type Mutation {
   ): CreateDirectUploadOutput
 }
 
-type Mutation {
-  send_otp (
-    object: SendOtpInput!
-  ): SendOtpOutput
+type Query {
+  me : SampleOutput
 }
 
 input SendOtpInput {
@@ -29,5 +27,16 @@ type SendOtpOutput {
 
 type CreateDirectUploadOutput {
   direct_upload : jsonb
+}
+
+type SampleOutput {
+  id : Int!
+  name : String
+  username : String
+  email : String
+  phone_number : String
+  avatar_url : String
+  created_at : String
+  updated_at : String
 }
 

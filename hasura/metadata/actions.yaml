@@ -7,14 +7,16 @@ actions:
     headers:
     - name: X-Hasura-Service-Key
       value_from_env: HASURA_SERVICE_KEY
-- name: send_otp
+- name: me
   definition:
-    kind: synchronous
+    kind: ""
     handler: '{{ACTION_BASE_URL}}'
     forward_client_headers: true
     headers:
     - name: X-Hasura-Service-Key
       value_from_env: HASURA_SERVICE_KEY
+  permissions:
+  - role: user
 custom_types:
   enums: []
   input_objects:
@@ -23,4 +25,5 @@ custom_types:
   objects:
   - name: SendOtpOutput
   - name: CreateDirectUploadOutput
+  - name: SampleOutput
   scalars: []

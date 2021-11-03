@@ -6,10 +6,41 @@ remote_relationships:
     hasura_fields:
     - id
     remote_field:
-      file:
+      attachment:
         arguments:
           input:
+            attribute: avatar
             recordId: $id
             recordType: User
     remote_schema: Backend
   name: avatar
+select_permissions:
+- permission:
+    columns:
+    - created_at
+    - email
+    - id
+    - image
+    - name
+    - phone_number
+    - role
+    - updated_at
+    - username
+    filter:
+      id:
+        _eq: X-Hasura-User-Id
+  role: user
+update_permissions:
+- permission:
+    check: null
+    columns:
+    - email
+    - image
+    - name
+    - phone_number
+    - role
+    - username
+    filter:
+      id:
+        _eq: X-Hasura-User-Id
+  role: user

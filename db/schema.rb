@@ -136,7 +136,6 @@ ActiveRecord::Schema.define(version: 2021_10_16_122830) do
     t.string "unconfirmed_email"
     t.string "name"
     t.string "username"
-    t.string "image"
     t.string "email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

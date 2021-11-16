@@ -1,6 +1,6 @@
 module Types
   class MutationType < Types::BaseObject
-    field :attach_file, mutation: Mutations::AttachFile
-    field :attach_files, mutation: Mutations::AttachFiles
+    field :create_attachment, mutation: Mutations::CreateAttachment
+    field :create_attachments, mutation: Mutations::CreateAttachments
   end
 end

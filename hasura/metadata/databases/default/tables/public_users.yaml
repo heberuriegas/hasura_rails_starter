@@ -35,7 +35,6 @@ update_permissions:
     check: null
     columns:
     - email
-    - image
     - name
     - phone_number
     - role

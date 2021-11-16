@@ -39,6 +39,16 @@ class User < ApplicationRecord
 
   before_create :skip_confirmation!, if: -> { !email_required? }
   
+  def self.variants
+    {
+      thumbnail: { resize: "100x100" },
+    }
+  end
+
+  def avatar_variant(size)
+    self.avatar.variant(User.variants[size]).processed
+  end
+  
   def auth_by_phone_number?
     !email_required? && phone_number.present?
   end
@@ -86,6 +96,10 @@ class User < ApplicationRecord
   end 
 
   def avatar_url
-    Rails.application.routes.url_helpers.rails_blob_path(avatar , only_path: true) if avatar.attached?
+    ENV['HOST']+Rails.application.routes.url_helpers.rails_blob_path(avatar, only_path: true) if avatar.attached?
+  end
+
+  def avatar_thumbnail_url
+    ENV['HOST']+Rails.application.routes.url_helpers.rails_representation_url(avatar_variant(:thumbnail).processed, only_path: true)
   end
 end

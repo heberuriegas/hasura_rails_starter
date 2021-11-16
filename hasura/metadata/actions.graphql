@@ -36,6 +36,7 @@ type SampleOutput {
   email : String
   phone_number : String
   avatar_url : String
+  avatar_thumbnail_url : String
   created_at : String
   updated_at : String
 }

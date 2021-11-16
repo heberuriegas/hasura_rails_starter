@@ -6,3 +6,54 @@
     - name: X-Hasura-Service-Key
       value_from_env: HASURA_SERVICE_KEY
     forward_client_headers: true
+  permissions:
+  - role: user
+    definition:
+      schema: |-
+        schema  { query: Query mutation: Mutation }
+
+        scalar ISO8601DateTime
+
+        scalar bigint
+
+        type Attachment { blob: Blob!
+          createdAt: ISO8601DateTime!
+          id: String!
+          url: String!
+        }
+
+        type Blob { byteSize: bigint!
+          checksum: String!
+          contentType: String!
+          createdAt: ISO8601DateTime!
+          filename: String!
+          id: String!
+          key: String!
+        }
+
+        type Mutation { createAttachment(input: CreateAttachmentInput!): Boolean
+          createAttachments(input: CreateAttachmentsInput!): Boolean
+        }
+
+        type Query { attachment(input: AttachmentsAttributes!): Attachment
+          attachments(input: AttachmentsAttributes!): [Attachment!]!
+        }
+
+        input AttachmentsAttributes {attribute: String!
+          recordId: bigint!
+          recordType: String!
+        }
+
+        input CreateAttachmentInput {attribute: String!
+          clientMutationId: String
+          relatedId: Int!
+          relatedType: String!
+          signedId: String!
+        }
+
+        input CreateAttachmentsInput {attribute: String!
+          clientMutationId: String
+          relatedId: Int!
+          relatedType: String!
+          signedIds: [String!]!
+        }

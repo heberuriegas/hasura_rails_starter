@@ -6,12 +6,16 @@ module Mutations
     argument :attribute, String, required: true
     argument :signed_id, String, required: true
 
-    type Boolean
+    class CreateAttachmentOutput < GraphQL::Schema::Object
+      field :success, Boolean, null: false
+    end
+
+    type CreateAttachmentOutput
   
     def resolve(input)
       related_id, related_type, attribute, signed_id = input.values_at(:related_id, :related_type, :attribute, :signed_id)
       # TODO: can? update
-      related_type.constantize.find(related_id).update(attribute => signed_id)
+      { success: related_type.constantize.find(related_id).update(attribute => signed_id) }
     end
   end
 end

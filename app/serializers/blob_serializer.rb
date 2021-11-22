@@ -6,4 +6,8 @@ class BlobSerializer < ActiveModel::Serializer
   attributes :byte_size
   attributes :checksum
   attributes :created_at
+
+  def filename
+    object.filename.to_s
+  end
 end

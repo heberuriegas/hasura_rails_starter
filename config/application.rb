@@ -24,9 +24,13 @@ module HasuraRailsStarter
   end
 end
 
-# Load actions
+# Load hasura actions and hasura events
 Rails.application.reloader.to_prepare do
   Dir.glob('app/actions/**/*.rb').each do |model|
     model.gsub('app/actions/', '').gsub('.rb', '').titleize.gsub(' ', '').gsub('/', '::').constantize
+  end
+
+  Dir.glob('app/events/**/*.rb').each do |model|
+    model.gsub('app/events/', '').gsub('.rb', '').titleize.gsub(' ', '').gsub('/', '::').constantize
   end
 end

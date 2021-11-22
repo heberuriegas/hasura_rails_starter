@@ -40,7 +40,7 @@ gem 'omniauth-github'
 # gem 'omniauth-google-oauth2'
 # gem 'omniauth-apple'
 gem 'hasura_handler', git: 'https://github.com/woohoou/HasuraHandler.git'
-gem "graphql-client", "~> 0.16.0"
+gem "graphql-client", "~> 0.17.0"
 gem 'active_model_otp', '~> 2.2'
 gem 'twilio-ruby', '~> 5.54'
 gem "onesignal-ruby", "~> 0.5.0"

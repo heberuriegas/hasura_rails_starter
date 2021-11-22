@@ -6,7 +6,11 @@ module Mutations
     argument :attribute, String, required: true
     argument :signed_ids, [String], required: true
     
-    type Boolean
+    class CreateAttachmentsOutput < GraphQL::Schema::Object
+      field :success, Boolean, null: false
+    end
+
+    type CreateAttachmentsOutput
   
     def resolve(input)
       related_id, related_type, attribute, signed_ids = input.values_at(:related_id, :related_type, :attribute, :signed_ids)

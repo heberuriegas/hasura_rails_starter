@@ -64,6 +64,7 @@ Hasura should be running in port 8080 and the rails web server port 3000
 
 ## TODO
 
+- Authorization with cancancan
 - Configure one click heroku deploy
 - Docs for registration and authentication with email and otp
 - Docs for oauth

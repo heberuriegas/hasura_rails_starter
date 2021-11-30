@@ -49,6 +49,10 @@ gem "cancancan", "~> 3.3"
 gem "activeadmin", "~> 2.9"
 gem "aldous", "~> 1.1"
 gem "audited", "~> 5.0"
+gem "doorkeeper", "~> 5.5"
+gem "doorkeeper-grants_assertion", "~> 0.3.1"
+gem "octokit", "~> 4.21"
+gem "active_model_serializers", "~> 0.10.12"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -78,13 +82,3 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
-
-
-gem "doorkeeper", "~> 5.5"
-
-gem "doorkeeper-grants_assertion", "~> 0.3.1"
-
-gem "octokit", "~> 4.21"
-
-gem "active_model_serializers", "~> 0.10.12"

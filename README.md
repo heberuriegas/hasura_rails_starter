@@ -4,11 +4,16 @@ Hasura Rails Starter simplifies the setup of Hasura and a rails web server that 
 
 ## What it contains?
 
-- Rails 6.1 as web server
-- PostgreSQL 12 as database
+- Rails 6.1 and PostgreSQL 12 as webserver and database
 - Hasura 2.0 as graphql engine
+- User authentication
+  - username/email with doorkeeper
+  - otp sms with active_model_otp
+  - client OAuth with doorkeeper assertion strategy
+  - server OAuth with omniauth
+- Authorization with cancancan
+- File uploads with ActiveStorage
 - Sidekiq as job manager
-- User authentication with JWT using devise and devise-jwt
 
 ## Getting started
 
@@ -66,10 +71,15 @@ Hasura should be running in port 8080 and the rails web server port 3000
 ## TODO
 
 - Configure one click heroku deploy
-- Docs for registration and authentication with email and otp
-- Docs for oauth
-- Docs for actions and events microservices for hasura
-- Docs for file uploads
+- Docs for authorization with cancancan
+- Docs for registration and authentication with email and otp with devise and doorkeeper
+- Docs for OAuth assertion strategy with github and octokit example
+- Docs for OAuth with omniauth
+- Docs for remote graphql schema with graphql-ruby
+- Docs for hasura authentication
+- Docs for actions and events microservices for hasura with hasura_handler
+- Docs for file uploads with ActiveStorage
+- Reference to ready to go react native application with kitten tricks
 
 ## License
 

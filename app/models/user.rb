@@ -38,7 +38,16 @@ class User < ApplicationRecord
   validates :username, uniqueness: true, allow_blank: true
 
   before_create :skip_confirmation!, if: -> { !email_required? }
+
+  delegate :can?, :cannot?, to: :ability
+
+  before_create :set_default_role
   
+  ROLES = {
+    admin: 'admin',
+    user: 'user'
+  }
+
   def self.variants
     {
       thumbnail: { resize: "100x100" },
@@ -101,5 +110,18 @@ class User < ApplicationRecord
 
   def avatar_thumbnail_url
     ENV['HOST']+Rails.application.routes.url_helpers.rails_representation_url(avatar_variant(:thumbnail).processed, only_path: true)
+  end
+
+  def admin?
+    role == 'admin'
+  end
+
+  private
+  def ability
+    @ability ||= Ability.new(self)
+  end
+
+  def set_default_role
+    self.role = ROLES[:user] unless self.role?
   end
 end

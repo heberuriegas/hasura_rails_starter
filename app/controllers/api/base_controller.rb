@@ -7,7 +7,14 @@ module Api
     end
 
     def current_user
-      User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token &&  valid_doorkeeper_token?
+      User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token && valid_doorkeeper_token?
+    end
+
+    protected
+    def authenticate_with_service_key
+      unless request.headers['X-Hasura-Service-Key'] == ENV['HASURA_SERVICE_KEY']
+        render status: 403, json: {}
+      end
     end
   end
 end

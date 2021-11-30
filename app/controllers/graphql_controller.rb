@@ -1,6 +1,5 @@
-class GraphqlController < ApplicationController
-  skip_before_action :verify_authenticity_token
-  # before_action :authenticate_with_service_key
+class GraphqlController < Api::BaseController
+  before_action :authenticate_with_service_key
 
   def execute
     variables = prepare_variables(params[:variables])
@@ -8,13 +7,18 @@ class GraphqlController < ApplicationController
     operation_name = params[:operationName]
     context = {
       # Query context goes here, for example:
-      # current_user: current_user,
+      current_user: current_user,
     }
     result = BaseSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
+  rescue AuthorizationError => e
+    handle_authorization_error(e)
   rescue StandardError => e
-    raise e unless Rails.env.development?
-    handle_error_in_development(e)
+    if Rails.env.development?
+      handle_error_in_development(e)
+    else
+      handle_error(e)
+    end
   end
 
   private
@@ -46,9 +50,11 @@ class GraphqlController < ApplicationController
     render json: { errors: [{ message: e.message, backtrace: e.backtrace }], data: {} }, status: 500
   end
 
-  def authenticate_with_service_key
-    unless request.headers['X-Hasura-Service-Key'] == ENV['HASURA_SERVICE_KEY']
-      render status: 403, json: {}
-    end
+  def handle_authorization_error(e)
+    render json: { errors: [{ message: e.message, extensions: { path: '$', code: 'authorization-error' } }], data: {} }, status: 403
+  end
+
+  def handle_error(e)
+    render json: { errors: [{ message: e.message, extensions: { path: '$', code: 'unexpected-error' } }], data: {} }, status: 500
   end
 end

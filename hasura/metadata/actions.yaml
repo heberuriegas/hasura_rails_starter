@@ -7,6 +7,13 @@ actions:
     headers:
     - name: X-Hasura-Service-Key
       value_from_env: HASURA_SERVICE_KEY
+- name: custom_update_users_by_pk
+  definition:
+    kind: synchronous
+    handler: '{{ACTION_BASE_URL}}'
+    headers:
+    - name: X-Hasura-Service-Key
+      value_from_env: HASURA_SERVICE_KEY
 - name: me
   definition:
     kind: ""
@@ -22,8 +29,12 @@ custom_types:
   input_objects:
   - name: SendOtpInput
   - name: CreateDirectUploadInput
+  - name: UpdateUserUsersSetInput
+  - name: UpdateUserUsersPkColumnsInput
   objects:
   - name: SendOtpOutput
   - name: CreateDirectUploadOutput
   - name: SampleOutput
+  - name: MeOutput
+  - name: UpdateUserOutput
   scalars: []

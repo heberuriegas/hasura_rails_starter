@@ -19,6 +19,7 @@
         type Attachment { blob: Blob!
           createdAt: ISO8601DateTime!
           id: String!
+          thumbnailUrl: String!
           url: String!
         }
 
@@ -31,8 +32,14 @@
           key: String!
         }
 
-        type Mutation { createAttachment(input: CreateAttachmentInput!): Boolean
-          createAttachments(input: CreateAttachmentsInput!): Boolean
+        type CreateAttachmentOutput { success: Boolean!
+        }
+
+        type CreateAttachmentsOutput { success: Boolean!
+        }
+
+        type Mutation { createAttachment(input: CreateAttachmentInput!): CreateAttachmentOutput
+          createAttachments(input: CreateAttachmentsInput!): CreateAttachmentsOutput
         }
 
         type Query { attachment(input: AttachmentsAttributes!): Attachment

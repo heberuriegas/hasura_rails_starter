@@ -4,8 +4,15 @@ type Mutation {
   ): CreateDirectUploadOutput
 }
 
+type Mutation {
+  custom_update_users_by_pk (
+    pk_columns: UpdateUserUsersPkColumnsInput!
+    _set: UpdateUserUsersSetInput
+  ): UpdateUserOutput
+}
+
 type Query {
-  me : SampleOutput
+  me : MeOutput
 }
 
 input SendOtpInput {
@@ -19,6 +26,34 @@ input CreateDirectUploadInput {
   content_type : String!
   checksum : String!
   byte_size : Int!
+}
+
+input UpdateUserUsersSetInput {
+  allow_password_change : Boolean
+  confirmation_sent_at : timestamp
+  confirmation_token : String
+  confirmed_at : timestamp
+  country_code : String
+  created_at : timestamp
+  email : String
+  encrypted_password : String
+  id : bigint
+  image : String
+  is_active : Boolean
+  name : String
+  otp_secret_key : String
+  phone_number : String
+  remember_created_at : timestamp
+  reset_password_sent_at : timestamp
+  reset_password_token : String
+  role : String
+  unconfirmed_email : String
+  updated_at : timestamp
+  username : String
+}
+
+input UpdateUserUsersPkColumnsInput {
+  id : bigint!
 }
 
 type SendOtpOutput {
@@ -39,5 +74,25 @@ type SampleOutput {
   avatar_thumbnail_url : String
   created_at : String
   updated_at : String
+}
+
+type MeOutput {
+  id : Int!
+  name : String
+  username : String
+  email : String
+  phone_number : String
+  avatar : jsonb
+  created_at : String
+  updated_at : String
+}
+
+type UpdateUserOutput {
+  email : String
+  id : bigint!
+  name : String
+  phone_number : String
+  username : String
+  avatar : jsonb
 }
 

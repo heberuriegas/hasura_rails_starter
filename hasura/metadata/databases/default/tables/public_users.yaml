@@ -20,10 +20,8 @@ select_permissions:
     - created_at
     - email
     - id
-    - image
     - name
     - phone_number
-    - role
     - updated_at
     - username
     filter:

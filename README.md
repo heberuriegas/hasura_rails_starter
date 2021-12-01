@@ -26,26 +26,27 @@ git clone https://github.com/woohoou/hasura_rails_starter
 2. Copy and configure the env file
 
 ```
-cp env.sample .env
+cp .env.sample .env
 ```
 
-3. Build containers
+3. Install node packages
+
+```
+yarn
+```
+
+4. Build containers
 
 ```
 docker-compose up
 ```
 
-4. Run migrations and seeds
+5. Run migrations and seeds
 
 ```
 docker-compose exec backend rails db:setup
 ```
 
-5. Install node packages
-
-```
-yarn
-```
 
 6. Apply hasura metadata export
 
